@@ -18,7 +18,7 @@ after_success:
 
   # log in to Docker Hub and pushes the containers
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push -t rafaelcompanhoni/multi-client
-  - docker push -t rafaelcompanhoni/multi-nginx
-  - docker push -t rafaelcompanhoni/multi-server
-  - docker push -t rafaelcompanhoni/multi-worker
+  - docker push rafaelcompanhoni/multi-client
+  - docker push rafaelcompanhoni/multi-nginx
+  - docker push rafaelcompanhoni/multi-server
+  - docker push rafaelcompanhoni/multi-worker
