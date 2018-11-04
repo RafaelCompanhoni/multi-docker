@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t rafaelcompanhoni/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  # the coverage arg makes sure that the test results do not block Travis
+  - docker run rafaelcompanhoni/react-test npm test -- --coverage 
+
+after_success:
+  # builds the production containers for each part of the application
+  - docker build -t rafaelcompanhoni/multi-client ./client
+  - docker build -t rafaelcompanhoni/multi-nginx ./nginx
+  - docker build -t rafaelcompanhoni/multi-server ./server
+  - docker build -t rafaelcompanhoni/multi-worker ./worker
+
+  # log in to Docker Hub and pushes the containers
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push -t rafaelcompanhoni/multi-client
+  - docker push -t rafaelcompanhoni/multi-nginx
+  - docker push -t rafaelcompanhoni/multi-server
+  - docker push -t rafaelcompanhoni/multi-worker
